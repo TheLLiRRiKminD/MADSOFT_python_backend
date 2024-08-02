@@ -28,7 +28,7 @@ cd MADSOFT_python_backend
 2. Запустите Docker Compose:
 
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 
 3. Создайте суперпользователя для доступа к admin панели:
