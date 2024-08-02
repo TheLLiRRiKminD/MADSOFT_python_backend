@@ -17,10 +17,12 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data/pgdata
     healthcheck:
-          test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-          interval: 5s
-          timeout: 5s
-          retries: 5
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
 
   web:
     restart: always
@@ -36,6 +38,9 @@ services:
     depends_on:
       - db
       - minio
+    networks:
+      - frontend
+      - backend
 
   minio:
     image: minio/minio
@@ -48,7 +53,16 @@ services:
       - "9001:9001"
     volumes:
       - minio_data:/data
+    networks:
+      - frontend
+      - backend
 
 volumes:
   pg_data:
   minio_data:
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
